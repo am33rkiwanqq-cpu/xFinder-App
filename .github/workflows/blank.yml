@@ -1,0 +1,180 @@
+# This is a basic workflow to help you get started with Actions<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xFinder - المحرك الذكي لحل المسائل</title>
+    <style>
+        /* تصميم الموقع المستقل */
+        body {
+            background-color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #eeeeee;
+            text-align: center;
+        }
+
+        .logo {
+            color: #d32f2f;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        h1 { color: #333; margin-bottom: 30px; }
+
+        /* صندوق البحث الذكي */
+        .search-area {
+            position: relative;
+            background: white;
+            border: 2px solid #dfe1e5;
+            border-radius: 30px;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .search-area:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+
+        input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: transparent;
+        }
+
+        .btn-solve {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-solve:hover { background: #b71c1c; }
+
+        /* منطقة النتائج */
+        #result-box {
+            margin-top: 40px;
+            padding: 25px;
+            border-radius: 15px;
+            background: #fff9f9;
+            border: 1px solid #ffcdd2;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .result-text { font-size: 20px; color: #555; }
+        .x-val { font-size: 40px; color: #d32f2f; font-weight: bold; margin-top: 10px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" class="logo">xFinder 🔍</a>
+    </div>
+
+    <div class="container">
+        <h1>أهلاً بك في xFinder.. اكتب مسألتك وسأقوم بحلها</h1>
+        
+        <div class="search-area">
+            <input type="text" id="problemInput" placeholder="مثال: كان معي 100 ريال اشتريت x وبقي 20..">
+            <button class="btn-solve" onclick="smartSolve()">حل المسألة</button>
+        </div>
+
+        <div id="result-box">
+            <div class="result-text" id="explanation"></div>
+            <div class="x-val" id="resultValue"></div>
+        </div>
+    </div>
+
+    <script>
+        function smartSolve() {
+            let input = document.getElementById('problemInput').value;
+            
+            // استخراج الأرقام من المسألة الطويلة
+            let numbers = input.match(/\d+/g);
+
+            if (numbers && numbers.length >= 2) {
+                let num1 = parseFloat(numbers[0]);
+                let num2 = parseFloat(numbers[1]);
+                
+                // حساب الفرق (وهو المبدأ الأساسي لإيجاد x في مسائل الصف السادس)
+                let x = Math.abs(num1 - num2);
+
+                document.getElementById('result-box').style.display = 'block';
+                document.getElementById('explanation').innerText = "لقد حللت المسألة ووجدت الأرقام " + num1 + " و " + num2 + ":";
+                document.getElementById('resultValue').innerText = "قيمة x = " + x;
+            } else {
+                alert("من فضلك اكتب المسألة واذكر فيها رقمين على الأقل ليتمكن xFinder من حلها!");
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
